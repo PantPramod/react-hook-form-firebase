@@ -1,0 +1,36 @@
+.main-footer{
+    /* background: red; */
+}
+.footer{
+    color: #7f838a;
+    background: #edeef1;
+    text-align: center;
+    padding: 40px 30px;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.render{
+    display: block;
+    font-size: 16px;
+    color:#579EEE;
+    font-family: 'Lato', sans-serif;
+}
+.footer img{
+    display: inline-block;
+    position: relative;
+    height: 24px;
+}
+.image-link{
+    color: #7f838a;
+    text-decoration: none;
+    margin: 40px 0px;
+    /* background: blue; */
+    display: block;
+}
+.image-link span{
+    color: #7f838a;
+    margin-right: 10px;
+   
+}

@@ -7,7 +7,6 @@ type closeProps = {
 
 const MessageBox = (props: closeProps) => {
     return <div className='messagebox'>
-
         <h3>Successfully Added Record</h3>
         <button onClick={() => props.OnClose()}>Close</button>
     </div>;

@@ -1,0 +1,243 @@
+.content{
+    margin-top: 110px;
+    /* max-width: 1080px; */
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Lato", sans-serif;
+}
+.wraper{
+  background: #ffffff;
+  padding: 0 30px;
+}
+.wrapper-form{
+  padding: 0 30px;
+}
+  .sub-heading{
+    margin: 0 139px;
+    padding: 20px 0;
+    background: #ffffff;
+  }
+  h2{
+    margin-bottom: 17.5px;
+    font-size: 36px;
+    color:#515357;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 100;
+  }
+  .dest-group{
+    margin: 20px 0;
+  }
+  .dest{
+    font-size: 14px;
+    color: #808080;
+    display: inline;
+    margin-right: 10px;
+  }
+  h4{
+    font-size: 16px;
+    margin: 40px 0;
+    color: #515357;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  form{
+    margin: 0px 139px;
+    padding: 20px 0;
+    background: #f9f9f9;
+    /* width: 760px; */
+  }
+  
+  .input-box{
+    display: flex;
+    flex-direction: row;
+    max-width: 760px;
+    /* justify-content: space-between; */
+  }
+  
+  .input-box label{
+    width:210px;
+    font-size:16px;
+    margin: 17.5px 0;
+    color: #515357;
+  }
+  .input-box label span{
+   color: red;
+  }
+  .input-box input,.input-box select{
+    padding: 4px 4px 4px 15px;
+    margin: 17.5px 0;
+    outline: none;
+    border: 1px solid #d1cfcf;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    height: 40px;
+    font-size: 16px;
+    line-height: 1.4;
+    display: inline-block;
+    width: 100%;
+    color: #515357;
+    /* flex:1; */
+    
+  }
+ 
+  
+  .input-box div{
+    flex-basis: 60%;
+  }
+  .input-box div p{
+    padding: 10px;
+    color: rgb(245, 87, 24);
+  }
+  .attach{
+    width: 15px;
+    height: 15px;
+
+  }
+  
+   #textarea{
+    /* flex-basis: 50%; */
+    height: 200px;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid #d1cfcf;
+  }
+  .field-error{
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    flex: 1;
+  }
+  #phoneNumber{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+ 
+  #cc{
+    flex-basis: 20%;
+    width: 100px;
+  }
+  #phone{
+    flex-basis: 75%;
+  
+  }
+  .btn-container{
+    margin: 0 139px 80px;
+    padding: 20px 0;
+    text-align: center;
+  }
+  .sub{
+    font-size: 14px;
+    text-transform: uppercase;
+    font-family: "Lato", sans-serif;
+    margin-top: 17.5px;
+    margin-bottom: 17.5px;
+    padding: 10px 15px ;
+    background: #4f65f1;
+    color: white;
+    border-radius: 3px;
+    border-color: #4b60e5;
+    letter-spacing: 2px;
+  }
+  
+ 
+ 
+  
+
+    .fileinput{
+      padding: 0 0 0 15px;
+      
+    }
+    .center{
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+    .fileinput .error{
+      /* clear: left; */
+      color: red;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+    .fileinput span{
+      color: green;
+      margin-left: 10px;
+      font-size: 16px;
+    }
+    .recaptcha{
+      padding-left: 15px;
+    }
+    .custom-btn{
+      float: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* flex-direction: column; */
+      cursor: pointer;
+      border: 1px solid #e2e2e2;
+      width:230px;
+      height: 40px;
+      color: #515357;
+      font: normal 400 16px/1.8 Lato;
+      border-radius: 3px;
+    }
+    input[type="file"] {
+      display: none;
+      }
+  
+  @media (max-width:768px){
+   .input-box label{
+    padding:10px 0; 
+   } 
+   .input-box{
+    display: flex;
+    flex-direction: column;
+  }
+  }
+  
+  header{
+   padding: 0 30px;
+   margin-left: auto;
+   margin-right: auto; 
+  
+  }
+  
+  header img{
+    height: 77px;
+
+  }
+  .mw{
+   max-width: 1080px;
+  }
+  .fixed{
+  
+  background: white;
+  position: fixed;
+  height: 110px;
+  top:0;
+  left: 0;
+  right: 0;
+  padding: 0 30px;
+  }
+  .img-box{
+    margin: 0 114.5px;
+
+  }
+  .img-box img{
+    margin: 17.5px 0;
+  }
+  
+  
+  @media(max-width:768px){
+    #phoneNumber{
+     flex-direction: column;
+      width: 100%;
+    }
+    #cc{
+      margin-bottom: 20px;
+    }
+  }

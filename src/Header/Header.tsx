@@ -1,5 +1,5 @@
 import React from 'react';
-import image from './images/image.png';
+import image from '../images/image.png';
 
 
 const Header = () => {
@@ -9,10 +9,6 @@ const Header = () => {
                 <img src={image} alt="Image" />
             </div>
         </div>
-
-        <h1>Full-Stack Engineer</h1>
-        <p>REMOTE OPTIONAL /PRODUCT – ENGINEERING /FULL-TIME</p>
-
     </header>;
 };
 
