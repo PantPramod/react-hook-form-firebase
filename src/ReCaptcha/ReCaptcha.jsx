@@ -1,13 +1,15 @@
 import React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 // const TEST_SITE_KEY = "6LdcpVUeAAAAAHbo-xCNnccQ_vRGxWbESr7r4zg_";
-const sitekey="6LfaqlUeAAAAAGgUEVFTD3c0C1T6p4mdqBJDtpak"
+const sitekey="6Leitl0eAAAAAIHt4ONecWJB5qWYbcpxbb1essxb"
 
-function onChange(value) {
-    console.log("Captcha value:", value);
-}
 
-const ReCaptcha = () => {
+
+const ReCaptcha = ({OnClick}) => {
+  const onChange=(value)=>{
+       console.log(value);
+       OnClick(true);
+  }
     return <>
    <div className='center'>
     <ReCAPTCHA

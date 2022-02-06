@@ -13,10 +13,23 @@ const Content = () => {
 
     const [resume, setResume] = useState<FileList>();
     const [resumeUrl, setResumeUrl] = useState('');
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({});
-    const [showMessageBox, setShowMessageBox] = useState(false);
-    const [progress, setProgress] = useState(0);
 
+
+    const defaultValues = {
+        fullName: '',
+        email: '',
+        company: '',
+        phone: '',
+        cC: '',
+        link: '',
+        info: '',
+        gender: '',
+    }
+
+    const { register, handleSubmit, watch, setValue, formState: { errors }, reset } = useForm({ defaultValues });
+    const [showMessageBox, setShowMessageBox] = useState(false);
+    const [isVerified, setIsVarified] = useState<Boolean>(false);
+    const [isSending, setIsSending] = useState(false);
 
     function isValidEmail(mail: string) {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
@@ -59,7 +72,7 @@ const Content = () => {
         set(newPostRef, {
             fullName: data.fullName,
             email: data.email,
-            resume: data.resume,
+            resume: resumeUrl,
             company: data.company,
             phone: data.phone,
             cC: data.cC,
@@ -92,43 +105,50 @@ const Content = () => {
         </div>
         <div className='wrapper-form'>
             <form onSubmit={handleSubmit((data) => {
+                if (isVerified) {
+                    if (resume && (resume[0].type == "application/pdf" && resume[0].size < 5000000)) {
+                        setIsSending((prev) => !prev);
+                        const storage = getStorage();
+                        const storageRef = refstorage(storage, `files/${resume[0].name}`);
+                        const uploadTask = uploadBytesResumable(storageRef, resume[0]);
 
-                const storage = getStorage();
 
-                if (resume && (resume[0].type == "application/pdf" && resume[0].size < 5000000)) {
-                    const storageRef = refstorage(storage, `files/${resume[0].name}`);
-                    const uploadTask = uploadBytesResumable(storageRef, resume[0]);
+                        uploadTask.on('state_changed',
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                console.log('Upload is ' + progress + '% done');
 
-
-                    uploadTask.on('state_changed',
-                        (snapshot) => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            console.log('Upload is ' + progress + '% done');
-                            setProgress((prev) => progress);
-                            switch (snapshot.state) {
-                                case 'paused':
-                                    console.log('Upload is paused');
-                                    break;
-                                case 'running':
-                                    console.log('Upload is running');
-                                    break;
+                                switch (snapshot.state) {
+                                    case 'paused':
+                                        console.log('Upload is paused');
+                                        break;
+                                    case 'running':
+                                        console.log('Upload is running');
+                                        break;
+                                }
+                            },
+                            (error) => { console.log(error) },
+                            () => {
+                                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                                    console.log('File available at', downloadURL);
+                                    setResumeUrl(downloadURL);
+                                    setShowMessageBox(true)
+                                    reset(defaultValues);
+                                    setResume(undefined);
+                                    setIsVarified(false);
+                                    setIsSending(false);
+                                });
                             }
-                        },
-                        (error) => { console.log(error) },
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                                console.log('File available at', downloadURL);
-                                setResumeUrl(downloadURL);
-                                setShowMessageBox(true)
-                            });
-                        }
-                    );
+                        );
 
-                    writeHandler({ fullName: data.fullName, email: data.email, resume: resumeUrl, company: data.company, phone: data.phone, cC: data.cC, link: data.link, info: data.info, gender: data.gender });
+                        writeHandler({ fullName: data.fullName, email: data.email, resume: resumeUrl, company: data.company, phone: data.phone, cC: data.cC, link: data.link, info: data.info, gender: data.gender });
+                    }
+                    else {
+                        alert("File should not be greater than 5 MB")
+                        setIsSending(false)
+                    }
                 }
-                else {
-                    alert("File should not be greater than 5 MB")
-                }
+
             })}>
 
                 <h4>Submit Your Application</h4>
@@ -177,7 +197,7 @@ const Content = () => {
                                 <input type="number" id="cc" placeholder='C. Code' {...register("cC", { required: "Enter country code", minLength: 2 })} />
                                 <input type="number" id="phone" placeholder='phone' {...register("phone", { required: "phone is required", minLength: 10 })} />
                             </div>
-                            {(errors.phone?.type === "required" || errors.cC?.type == "required") && <p>{errors.phone?.message || errors.cC.message}</p>}
+                            {(errors.phone?.type === "required" || errors.cC?.type == "required") && <p>{errors.phone?.message || errors.cC?.message}</p>}
                             {(errors.phone?.type === "minLength" || errors.cC?.type == "minLength") && <p> phone should be 10 digits </p>}
                         </div>
                     </div>
@@ -227,13 +247,13 @@ const Content = () => {
                     <div className='input-box'>
                         <label></label>
                         <div className='recaptcha'>
-                            <ReCaptcha />
+                            <ReCaptcha OnClick={(isvarify: Boolean) => setIsVarified(isvarify)} />
                         </div>
                     </div>
                 </div>
 
                 <div className='btn-container'>
-                    <input type="submit" className='sub' value="Submit Application" disabled={showMessageBox} />
+                    <input type="submit" className='sub' value={isSending ? "Sending...." : "Submit Application"} disabled={isSending || showMessageBox} />
                 </div>
             </form>
         </div >

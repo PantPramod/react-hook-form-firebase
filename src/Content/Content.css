@@ -13,9 +13,10 @@
   padding: 0 30px;
 }
   .sub-heading{
-    margin: 0 139px;
+    margin: 0 auto;
     padding: 20px 0;
     background: #ffffff;
+    width: 760px;
   }
   h2{
     margin-bottom: 17.5px;
@@ -43,10 +44,10 @@
     letter-spacing: 1px;
   }
   form{
-    margin: 0px 139px;
+    margin: 0 auto;
     padding: 20px 0;
     background: #f9f9f9;
-    /* width: 760px; */
+    width: 760px;
   }
   
   .input-box{
@@ -126,7 +127,7 @@
   
   }
   .btn-container{
-    margin: 0 139px 80px;
+    margin: 0 auto 80px;
     padding: 20px 0;
     text-align: center;
   }
@@ -144,7 +145,10 @@
     letter-spacing: 2px;
   }
   
- 
+ .sub:disabled{
+   background-color: #515357;
+   color: white;
+ }
  
   
 
@@ -155,10 +159,10 @@
     .center{
       margin-left: auto;
       margin-right: auto;
-      text-align: center;
+      text-align: center; 
     }
+
     .fileinput .error{
-      /* clear: left; */
       color: red;
       font-size: 16px;
       margin-left: 10px;
@@ -176,28 +180,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      /* flex-direction: column; */
       cursor: pointer;
       border: 1px solid #e2e2e2;
       width:230px;
       height: 40px;
       color: #515357;
-      font: normal 400 16px/1.8 Lato;
+      font: normal 400 16px/1.8 'Lato';
       border-radius: 3px;
     }
     input[type="file"] {
       display: none;
       }
   
-  @media (max-width:768px){
-   .input-box label{
-    padding:10px 0; 
-   } 
-   .input-box{
-    display: flex;
-    flex-direction: column;
-  }
-  }
   
   header{
    padding: 0 30px;
@@ -224,20 +218,31 @@
   padding: 0 30px;
   }
   .img-box{
-    margin: 0 114.5px;
+    margin: 0 auto;
+    width: 760px;
 
   }
   .img-box img{
     margin: 17.5px 0;
   }
   
+ @media(max-width:799px){
   
-  @media(max-width:768px){
-    #phoneNumber{
+  form, .img-box,.sub-heading{
+     width: auto;
+   }
+   .input-box{
      flex-direction: column;
-      width: 100%;
-    }
-    #cc{
-      margin-bottom: 20px;
-    }
+   }
+   .field-error{
+     padding: 0px;
+   }
+   .recaptcha{
+    padding-left: 0px;
   }
+  .center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+ }
