@@ -11,12 +11,18 @@ const ReCaptcha = ({OnClick}) => {
        OnClick(true);
   }
     return <>
-   <div className='center'>
-    <ReCAPTCHA
-    sitekey={sitekey}
-    onChange={onChange}
-  />
-  </div>
+                <div className='input'>
+                    <div className='input-box'>
+                        <label></label>
+                        <div className='recaptcha'>
+                            <div className='center'>
+                                <ReCAPTCHA sitekey={sitekey} onChange={onChange}/>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+   
     </>;
 };
 

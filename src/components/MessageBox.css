@@ -1,25 +1,40 @@
 .messagebox{
-    border:1px solid black;
+     
     position: fixed;
     top:50%;
     left: 50%;
     transform: translate(-250px, -100px);
     width: 500px;
     height: 200px;
-    background: white;
+    background: rgb(219, 211, 211);
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
 }
 button{
     padding: 7px 20px;
     align-self: center;
-
+}
+.messagebox button{
+    background: #4f65f1;
+    color: white;
+    border-radius: 3px;
+    border-color: #4b60e5;
+    letter-spacing: 2px;
+}
+.messagebox h3{
+    color:#504949;
+    font-weight: 400;
+    font-size: 20px;
 }
 @media (max-width:768px){
     .messagebox{
-        width: 300px;
-        transform: translate(-150px, -100px);
+        transform: translate(-200px, -100px);
+        width: 400px;
+        height: 200px;
     }
+    
 }
