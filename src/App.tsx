@@ -28,6 +28,7 @@ function App() {
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [isVerified, setIsVarified] = useState<Boolean>(false);
   const [isSending, setIsSending] = useState(false);
+
   const resumeRef = useRef<HTMLInputElement>(null);
 
   const defaultValues = {
@@ -48,10 +49,13 @@ function App() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (isVerified) {
       if (resume && (resume[0].size < 5000000)) {
+
         setIsSending((prev) => !prev);
+
         const storage = getStorage();
         const storageRef = refstorage(storage, `files/${resume[0].name}`);
         const uploadTask = uploadBytesResumable(storageRef, resume[0]);
+
         uploadTask.on('state_changed',
           (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -132,9 +136,8 @@ function App() {
           <h4>Submit Your Application</h4>
 
           <Input
-            type="text"
+            details={{ type: "text", label: "Full Name" }}
             register={register}
-            label="Full Name"
             isRequired={true}
             title="fullName"
             minLength={10}
@@ -142,9 +145,8 @@ function App() {
           />
 
           <Input
-            type="email"
+            details={{ type: "email", label: "Email" }}
             register={register}
-            label="Email"
             isRequired={true}
             title="email"
             errors={errors.email}
@@ -162,9 +164,8 @@ function App() {
           </div>
 
           <Input
-            type="number"
+            details={{ type: "number", label: "Country Code" }}
             register={register}
-            label="Country Code"
             isRequired={true}
             title="cC"
             minLength={2}
@@ -172,9 +173,8 @@ function App() {
           />
 
           <Input
-            type="number"
+            details={{ type: "number", label: "Phone Number" }}
             register={register}
-            label="phone"
             isRequired={true}
             title="phone"
             minLength={6}
@@ -182,17 +182,15 @@ function App() {
           />
 
           <Input
-            type="text"
+            details={{ type: "text", label: "Current Company", }}
             register={register}
-            label="Company"
             isRequired={false}
             title="company"
           />
 
           <Input
-            type="text"
+            details={{ type: "text", label: "LenkedIn URL", }}
             register={register}
-            label="LinkedIn URL"
             isRequired={false}
             title="link"
           />
@@ -215,7 +213,7 @@ function App() {
 
           <ReCaptcha
             OnClick={(isvarify: Boolean) => setIsVarified(isvarify)}
-            reset={showMessageBox && true}
+            reset={showMessageBox}
           />
 
           <div className='btn-container'>

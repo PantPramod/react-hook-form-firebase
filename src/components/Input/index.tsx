@@ -17,19 +17,17 @@ interface iFormValue {
 type propTypes = {
 
     register: UseFormRegister<iFormValue>,
-    label: string,
     isRequired: Boolean,
     title: Path<iFormValue>,
     minLength?: number,
-    type: string,
-    errors?: { type: string }
+    errors?: { type: string },
+    details: { type: string, label: string }
 }
 
-const index = ({ register, label, isRequired, title, minLength, type, errors }: propTypes) => {
+const index = ({ details, register, isRequired, title, minLength, errors }: propTypes) => {
     return <Input
-        type={type}
+        details={details}
         register={register}
-        label={label}
         isRequired={isRequired}
         title={title}
         minLength={minLength}

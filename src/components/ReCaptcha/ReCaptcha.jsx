@@ -11,16 +11,16 @@ const ReCaptcha = ({OnClick , reset }) => {
     
     const recaptchaRef = useRef();
 
-    useEffect(()=>{
-          recaptchaRef.current.reset();
-             },[reset])
+
 
   const onChange=(value)=>{
-    
-       OnClick(true);
+    OnClick(true);
   }
 
-  
+  useEffect(()=>{
+    recaptchaRef.current.reset();
+       },[reset])
+
     return <div className='input'>
                     <div className='input-box'>
                         <label></label>
