@@ -1,21 +1,34 @@
-import './App.css';
-import image from './images/image.png';
 import { useState, useRef } from 'react';
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { getDatabase, push, ref, set } from "firebase/database";
 import { getStorage, uploadBytesResumable, getDownloadURL, ref as refstorage } from "firebase/storage";
-import './Firebase/Firebase';
 import MessageBox from './components/MessageBox';
-import ReCaptcha from './ReCaptcha';
+import ReCaptcha from './components/ReCaptcha';
 import Input from './components/Input';
 import TextArea from './components/TextArea';
 import Select from './components/Select';
+import image from './images/image.png';
+import './Firebase/Firebase';
+import './App.css';
 
+type Inputs = {
+  fullName: string,
+  email: string,
+  company: string,
+  phone: string,
+  cC: string,
+  link: string,
+  info: string,
+  gender: string,
+}
 
 function App() {
-  const resumeRef = useRef<HTMLInputElement>(null);
+
   const [resume, setResume] = useState<FileList>();
-  const [resumeUrl, setResumeUrl] = useState('');
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [isVerified, setIsVarified] = useState<Boolean>(false);
+  const [isSending, setIsSending] = useState(false);
+  const resumeRef = useRef<HTMLInputElement>(null);
 
   const defaultValues = {
     fullName: '',
@@ -28,50 +41,66 @@ function App() {
     gender: '',
   }
 
-  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm({ defaultValues });
-  const [showMessageBox, setShowMessageBox] = useState(false);
-  const [isVerified, setIsVarified] = useState<Boolean>(false);
-  const [isSending, setIsSending] = useState(false);
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues });
 
 
-  type passDatatype = {
 
-    fullName: string,
-    email: string,
-    resume: string,
-    company?: string,
-    phone?: string,
-    cC?: string,
-    link?: string,
-    info?: string,
-    gender?: string,
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    if (isVerified) {
+      if (resume && (resume[0].size < 5000000)) {
+        setIsSending((prev) => !prev);
+        const storage = getStorage();
+        const storageRef = refstorage(storage, `files/${resume[0].name}`);
+        const uploadTask = uploadBytesResumable(storageRef, resume[0]);
+        uploadTask.on('state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          },
+          (error) => { console.log(error) },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              console.log('File available at', downloadURL);
+              const db = getDatabase();
+              const postListRef = ref(db, 'formdata');
+              const newPostRef = push(postListRef);
 
-  }
+              set(newPostRef, {
+                fullName: data.fullName,
+                email: data.email,
+                resume: downloadURL,
+                company: data.company,
+                phone: data.phone,
+                cC: data.cC,
+                link: data.link,
+                info: data.info,
+                gender: data.gender,
+              })
 
-  const writeHandler = (data: passDatatype) => {
-    const db = getDatabase();
-    const postListRef = ref(db, 'formdata');
-    const newPostRef = push(postListRef);
-
-    set(newPostRef, {
-      fullName: data.fullName,
-      email: data.email,
-      resume: resumeUrl,
-      company: data.company,
-      phone: data.phone,
-      cC: data.cC,
-      link: data.link,
-      info: data.info,
-      gender: data.gender,
-
-    })
+              setShowMessageBox(true)
+              reset(defaultValues);
+              setResume(undefined);
+              setIsVarified(false);
+              setIsSending(false);
+            });
+          }
+        );
+      }
+      else {
+        alert("File should not be greater than 5 MB")
+        setIsSending(false)
+      }
+    }
   }
 
   const chooseFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setResume(e.target.files)
     }
+  }
 
+  const onClose = () => {
+    setShowMessageBox(false);
   }
 
 
@@ -85,9 +114,8 @@ function App() {
     </header>
 
     <div className='content'>
-      {showMessageBox && <MessageBox OnClose={() => setShowMessageBox(false)} />}
-
       <div className='wraper'>
+
         <div className='sub-heading'>
           <h2>Full-Stack Engineer</h2>
           <div className='dest-group'>
@@ -97,57 +125,31 @@ function App() {
           </div>
         </div>
       </div>
+
       <div className='wrapper-form'>
-        <form onSubmit={handleSubmit((data) => {
-          if (isVerified) {
-            if (resume && (resume[0].type == "application/pdf" && resume[0].size < 5000000)) {
-              setIsSending((prev) => !prev);
-              const storage = getStorage();
-              const storageRef = refstorage(storage, `files/${resume[0].name}`);
-              const uploadTask = uploadBytesResumable(storageRef, resume[0]);
+        <form onSubmit={handleSubmit(onSubmit)}>
 
-
-              uploadTask.on('state_changed',
-                (snapshot) => {
-                  const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log('Upload is ' + progress + '% done');
-
-                  switch (snapshot.state) {
-                    case 'paused':
-                      console.log('Upload is paused');
-                      break;
-                    case 'running':
-                      console.log('Upload is running');
-                      break;
-                  }
-                },
-                (error) => { console.log(error) },
-                () => {
-                  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    console.log('File available at', downloadURL);
-                    setResumeUrl(downloadURL);
-                    setShowMessageBox(true)
-                    reset(defaultValues);
-                    setResume(undefined);
-                    setIsVarified(false);
-                    setIsSending(false);
-                  });
-                }
-              );
-
-              writeHandler({ fullName: data.fullName, email: data.email, resume: resumeUrl, company: data.company, phone: data.phone, cC: data.cC, link: data.link, info: data.info, gender: data.gender });
-            }
-            else {
-              alert("File should not be greater than 5 MB")
-              setIsSending(false)
-            }
-          }
-
-        })}>
           <h4>Submit Your Application</h4>
 
-          <Input type="text" register={register} label="Full Name" isRequired={true} title="fullName" minLength={10} errors={errors.fullName} />
-          <Input type="email" register={register} label="Email" isRequired={true} title="email" errors={errors.email} />
+          <Input
+            type="text"
+            register={register}
+            label="Full Name"
+            isRequired={true}
+            title="fullName"
+            minLength={10}
+            errors={errors.fullName}
+          />
+
+          <Input
+            type="email"
+            register={register}
+            label="Email"
+            isRequired={true}
+            title="email"
+            errors={errors.email}
+          />
+
           <div className='input'>
             <div className='input-box'>
               <label>Resume/CV <span>*</span> </label>
@@ -158,19 +160,74 @@ function App() {
               </div>
             </div>
           </div>
-          <Input type="number" register={register} label="Country Code" isRequired={true} title="cC" minLength={2} errors={errors.cC} />
-          <Input type="number" register={register} label="phone" isRequired={true} title="phone" minLength={6} errors={errors.phone} />
-          <Input type="text" register={register} label="Company" isRequired={false} title="company" />
-          <Input type="text" register={register} label="LinkedIn URL" isRequired={false} title="link" />
-          <TextArea register={register} label="Additional Information" isRequired={false} title="info" minLength={30} errors={errors.info} />
-          <Select register={register} label="Gender" title="gender" list={["select", "Male", "Female"]} />
-          <ReCaptcha OnClick={(isvarify: Boolean) => setIsVarified(isvarify)} />
+
+          <Input
+            type="number"
+            register={register}
+            label="Country Code"
+            isRequired={true}
+            title="cC"
+            minLength={2}
+            errors={errors.cC}
+          />
+
+          <Input
+            type="number"
+            register={register}
+            label="phone"
+            isRequired={true}
+            title="phone"
+            minLength={6}
+            errors={errors.phone}
+          />
+
+          <Input
+            type="text"
+            register={register}
+            label="Company"
+            isRequired={false}
+            title="company"
+          />
+
+          <Input
+            type="text"
+            register={register}
+            label="LinkedIn URL"
+            isRequired={false}
+            title="link"
+          />
+
+          <TextArea
+            register={register}
+            label="Additional Information"
+            isRequired={false}
+            title="info"
+            minLength={30}
+            errors={errors.info}
+          />
+
+          <Select
+            register={register}
+            label="Gender"
+            title="gender"
+            list={["Male", "Female"]}
+          />
+
+          <ReCaptcha
+            OnClick={(isvarify: Boolean) => setIsVarified(isvarify)}
+            reset={showMessageBox && true}
+          />
+
           <div className='btn-container'>
             <input type="submit" className='sub' value={isSending ? "Sending...." : "Submit Application"} disabled={isSending || showMessageBox} />
           </div>
+
         </form>
       </div >
+      {showMessageBox && <MessageBox OnClose={onClose} />}
     </div >
+
+
     <div className='main-footer'>
       <div className='footer'>
         <a href="https://render.com/" className='render'>Render Home Page</a>

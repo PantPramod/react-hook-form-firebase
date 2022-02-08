@@ -5,10 +5,10 @@ type closeProps = {
     OnClose: () => void
 }
 
-const MessageBox = (props: closeProps) => {
+const MessageBox = ({ OnClose }: closeProps) => {
     return <div className='messagebox'>
         <h3>Successfully Added Record</h3>
-        <button onClick={() => props.OnClose()}>Close</button>
+        <button onClick={() => OnClose()}>Close</button>
     </div>;
 }
 export default MessageBox;

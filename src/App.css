@@ -305,3 +305,24 @@ form, .img-box,.sub-heading{
   justify-content: center;
 }
 }
+
+select{
+  background: #e2e2e2;
+  padding: 4px 40px 4px 15px;
+  line-height: 1.4;
+  background-image: url("https://img.icons8.com/ios/50/000000/expand-arrow--v2.png");
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  background-position: right 10px top 5px;
+  appearance: none;
+}
+select:hover{
+  background: #c0c0c0;
+  background-image: url("https://img.icons8.com/ios/50/000000/expand-arrow--v2.png");
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  background-position: right 10px top 5px;
+  appearance: none;
+}

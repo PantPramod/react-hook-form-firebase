@@ -1,5 +1,5 @@
 import React from 'react';
-import { Path, useForm, UseFormRegister, SubmitHandler } from "react-hook-form";
+import { Path, UseFormRegister } from "react-hook-form";
 
 interface iFormValue {
 
@@ -25,7 +25,8 @@ const Select = ({ label, title, register, list }: propTypes) => {
         <div className='input-box'>
             <label>{label}</label>
             <div className='field-error'>
-                <select {...register(title)}>
+                <select {...register(title)} defaultValue="">
+                    <option value="" key={-1} >Select...</option>
                     {list.map((item, id) => <option value={item} key={id}>{item}</option>)}
                 </select>
             </div>
