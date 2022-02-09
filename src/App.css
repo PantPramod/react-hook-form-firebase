@@ -278,9 +278,10 @@ form{
     font: normal 400 16px/1.8 'Lato';
     border-radius: 3px;
     margin: 17.5px 0;
+    min-width: 230px;
   }
   input[type="file"] {
-    display: none;
+    /* display: none; */
     }
 
 
@@ -325,4 +326,39 @@ select:hover{
   background-repeat: no-repeat;
   background-position: right 10px top 5px;
   appearance: none;
+}
+
+
+
+
+.file-container{
+  display: flex;
+  flex-direction: row;
+  max-width: 230px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px 15px;
+  height: 40px;
+  border: 1px solid #e2e2e2;
+  background: #EBECF0;
+  border-radius: 3px;
+  margin: 17.5px 0;
+}
+
+.file-container .button-clip{
+  opacity: 0.4;
+  margin-right: 10px;
+}
+
+.file-container .text{
+  text-transform: uppercase;
+  opacity: 0.45;
+  font-size: 15px;
+
+}
+input[type='file']{
+    
+  opacity: 0;
+  position: absolute;
+  left: 0;
 }

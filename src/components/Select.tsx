@@ -3,6 +3,7 @@ import { Path, UseFormRegister } from "react-hook-form";
 interface iFormValue {
     fullName: string,
     email: string,
+    resume: any,
     company: string,
     phone: string,
     cC: string,

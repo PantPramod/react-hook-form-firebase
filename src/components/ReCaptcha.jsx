@@ -30,6 +30,8 @@ const ReCaptcha = ({OnClick , reset }) => {
                                 sitekey={TEST_SITE_KEY} 
                                 ref={recaptchaRef} 
                                 onChange={onChange}
+                                onErrored={()=>OnClick(false)}
+                                onExpired={()=>OnClick(false)}
                                 />         
                              </div>
                         </div>

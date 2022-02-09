@@ -17,6 +17,7 @@ import './App.css';
 type Inputs = {
   fullName: string,
   email: string,
+  resume: any,
   company: string,
   phone: string,
   cC: string,
@@ -27,7 +28,7 @@ type Inputs = {
 
 function App() {
 
-  const [resume, setResume] = useState<FileList>();
+
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [isVerified, setIsVarified] = useState<Boolean>(false);
   const [isSending, setIsSending] = useState(false);
@@ -35,6 +36,7 @@ function App() {
   const defaultValues = {
     fullName: '',
     email: '',
+    resume: null,
     company: '',
     phone: '',
     cC: '',
@@ -43,17 +45,17 @@ function App() {
     gender: '',
   }
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({ defaultValues });
+  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm({ defaultValues });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (isVerified) {
-      if (resume && (resume[0].size < 5000000 && resume[0].type === "application/pdf")) {
+      if (data.resume && (data.resume[0].size < 5000000 && data.resume[0].type === "application/pdf")) {
 
         setIsSending((prev) => !prev);
 
         const storage = getStorage();
-        const storageRef = refstorage(storage, `files/${resume[0].name}`);
-        const uploadTask = uploadBytesResumable(storageRef, resume[0]);
+        const storageRef = refstorage(storage, `files/${data.resume[0].name}`);
+        const uploadTask = uploadBytesResumable(storageRef, data.resume[0]);
 
         uploadTask.on('state_changed',
           (snapshot) => {
@@ -82,7 +84,7 @@ function App() {
 
               setShowMessageBox(true)
               reset(defaultValues);
-              setResume(undefined);
+
               setIsVarified(false);
               setIsSending(false);
             });
@@ -149,8 +151,11 @@ function App() {
           />
 
           <CustomUpload
-            getValue={(data) => setResume(data)}
-            reset={showMessageBox}
+            details={{ type: "file", label: "Resume" }}
+            register={register}
+            isRequired
+            title="resume"
+            errors={errors.resume}
           />
 
           <Input
