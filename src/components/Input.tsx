@@ -15,36 +15,26 @@ interface iFormValue {
 type propTypes = {
 
     register: UseFormRegister<iFormValue>,
-    isRequired: Boolean,
+    isRequired?: Boolean,
     title: Path<iFormValue>,
     minLength?: number,
     errors?: { type: string },
-    details: { type: string, label: string }
+    details: { type: string, label: string },
+    pattern?: any
 }
 
-function isValidEmail(mail: string) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-        return (true)
-    }
-    return (false)
-}
 
-const handleEmailValidate = (email: string) => {
 
-    const isValid = isValidEmail(email);
 
-    return isValid;
-};
-
-const Input = ({ details, register, isRequired, title, minLength, errors }: propTypes) => {
+const Input = ({ details, register, isRequired, title, minLength, errors, pattern }: propTypes) => {
 
 
     const obj = {
         ...(isRequired && { required: `${details.label} is Required` }),
         ...(minLength && { minLength: minLength }),
-        ...(details.type === "email" && { validate: handleEmailValidate })
-
+        ...(pattern && { pattern })
     }
+
     return (
         <div className='input'>
             <div className='input-box'>
@@ -57,6 +47,7 @@ const Input = ({ details, register, isRequired, title, minLength, errors }: prop
                     {errors?.type == 'required' && <p>{details.label} is required</p>}
                     {errors?.type == 'minLength' && <p> Minimum length should {minLength}</p>}
                     {errors?.type == 'validate' && <p> Enter Correct {details.label}</p>}
+                    {errors?.type == 'pattern' && <p> Enter Correct {details.label}</p>}
                 </div>
 
             </div>

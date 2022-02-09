@@ -17,7 +17,7 @@ type propTypes = {
 
     register: UseFormRegister<iFormValue>,
     label: string,
-    isRequired: Boolean,
+    isRequired?: Boolean,
     title: Path<iFormValue>,
     minLength?: number,
     errors?: { type: string }

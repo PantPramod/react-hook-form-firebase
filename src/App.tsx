@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { getDatabase, push, ref, set } from "firebase/database";
 import { getStorage, uploadBytesResumable, getDownloadURL, ref as refstorage } from "firebase/storage";
@@ -11,6 +11,7 @@ import CustomUpload from './components/CustomUpload';
 import image from './images/image.png';
 import './Firebase/Firebase';
 import './App.css';
+
 
 
 type Inputs = {
@@ -46,7 +47,7 @@ function App() {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (isVerified) {
-      if (resume && (resume[0].size < 5000000)) {
+      if (resume && (resume[0].size < 5000000 && resume[0].type === "application/pdf")) {
 
         setIsSending((prev) => !prev);
 
@@ -89,7 +90,7 @@ function App() {
         );
       }
       else {
-        alert("File should not be greater than 5 MB")
+        alert("Incorrect Resume File")
         setIsSending(false)
       }
     }
@@ -132,7 +133,7 @@ function App() {
           <Input
             details={{ type: "text", label: "Full Name" }}
             register={register}
-            isRequired={true}
+            isRequired
             title="fullName"
             minLength={10}
             errors={errors.fullName}
@@ -141,9 +142,10 @@ function App() {
           <Input
             details={{ type: "email", label: "Email" }}
             register={register}
-            isRequired={true}
+            isRequired
             title="email"
             errors={errors.email}
+            pattern={/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/}
           />
 
           <CustomUpload
@@ -154,7 +156,7 @@ function App() {
           <Input
             details={{ type: "number", label: "Country Code" }}
             register={register}
-            isRequired={true}
+            isRequired
             title="cC"
             minLength={2}
             errors={errors.cC}
@@ -163,7 +165,7 @@ function App() {
           <Input
             details={{ type: "number", label: "Phone Number" }}
             register={register}
-            isRequired={true}
+            isRequired
             title="phone"
             minLength={6}
             errors={errors.phone}
@@ -172,21 +174,20 @@ function App() {
           <Input
             details={{ type: "text", label: "Current Company", }}
             register={register}
-            isRequired={false}
             title="company"
           />
 
           <Input
             details={{ type: "text", label: "LenkedIn URL", }}
             register={register}
-            isRequired={false}
             title="link"
+            errors={errors.link}
+            pattern={/^https:\/\/www.linkedin.com\/.*$/}
           />
 
           <TextArea
             register={register}
             label="Additional Information"
-            isRequired={false}
             title="info"
             minLength={30}
             errors={errors.info}
