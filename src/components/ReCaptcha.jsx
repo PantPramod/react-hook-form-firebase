@@ -19,6 +19,7 @@ const ReCaptcha = ({OnClick , reset }) => {
 
   useEffect(()=>{
     recaptchaRef.current.reset();
+	  OnClick(false);
        },[reset])
 
     return <div className='input'>
