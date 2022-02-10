@@ -4,7 +4,7 @@ interface iFormValue {
 
     fullName: string,
     email: string,
-    resume: any,
+    resume: string,
     company: string,
     phone: string,
     cC: string,

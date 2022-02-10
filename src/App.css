@@ -362,3 +362,12 @@ input[type='file']{
   position: absolute;
   left: 0;
 }
+.success{
+  color:green;
+  position: absolute;
+  margin-left: 240px;
+  margin-top: 20px;
+  font-size: 17.5px;
+  font-weight: 400;
+  
+}

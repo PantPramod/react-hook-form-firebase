@@ -28,7 +28,6 @@ type Inputs = {
 
 function App() {
 
-
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [isVerified, setIsVarified] = useState<Boolean>(false);
   const [isSending, setIsSending] = useState(false);
@@ -36,7 +35,7 @@ function App() {
   const defaultValues = {
     fullName: '',
     email: '',
-    resume: null,
+    resume: '',
     company: '',
     phone: '',
     cC: '',
@@ -49,52 +48,48 @@ function App() {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (isVerified) {
-      if (data.resume && (data.resume[0].size < 5000000 && data.resume[0].type === "application/pdf")) {
 
-        setIsSending((prev) => !prev);
 
-        const storage = getStorage();
-        const storageRef = refstorage(storage, `files/${data.resume[0].name}`);
-        const uploadTask = uploadBytesResumable(storageRef, data.resume[0]);
+      setIsSending((prev) => !prev);
 
-        uploadTask.on('state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-          },
-          (error) => { console.log(error) },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log('File available at', downloadURL);
-              const db = getDatabase();
-              const postListRef = ref(db, 'formdata');
-              const newPostRef = push(postListRef);
+      const storage = getStorage();
+      const storageRef = refstorage(storage, `files/${data.resume[0].name}`);
+      const uploadTask = uploadBytesResumable(storageRef, data.resume[0]);
 
-              set(newPostRef, {
-                fullName: data.fullName,
-                email: data.email,
-                resume: downloadURL,
-                company: data.company,
-                phone: data.phone,
-                cC: data.cC,
-                link: data.link,
-                info: data.info,
-                gender: data.gender,
-              })
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        (error) => { console.log(error) },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            const db = getDatabase();
+            const postListRef = ref(db, 'formdata');
+            const newPostRef = push(postListRef);
 
-              setShowMessageBox(true)
-              reset(defaultValues);
+            set(newPostRef, {
+              fullName: data.fullName,
+              email: data.email,
+              resume: downloadURL,
+              company: data.company,
+              phone: data.phone,
+              cC: data.cC,
+              link: data.link,
+              info: data.info,
+              gender: data.gender,
+            })
 
-              setIsVarified(false);
-              setIsSending(false);
-            });
-          }
-        );
-      }
-      else {
-        alert("Incorrect Resume File")
-        setIsSending(false)
-      }
+            setShowMessageBox(true)
+            reset(defaultValues);
+
+            setIsVarified(false);
+            setIsSending(false);
+          });
+        }
+      );
+
     }
   }
 
@@ -104,7 +99,8 @@ function App() {
     setShowMessageBox(false);
   }
 
-
+  const resumeFile = watch("resume");
+  console.log(resumeFile)
   return (<div className="app">
     <header>
       <div className='fixed'>
@@ -156,6 +152,7 @@ function App() {
             isRequired
             title="resume"
             errors={errors.resume}
+            file={resumeFile}
           />
 
           <Input
